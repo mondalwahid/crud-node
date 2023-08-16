@@ -46,6 +46,32 @@ app.delete("/delete_user/:id", async (req, res) => {
   }
 });
 
+// Edit users API below
+app.put("/update_user/:id", async (req, res) => {
+  const userId = req.params.id;
+  const { name, age, designation } = req.body;
+
+  try {
+    const updatedUser = await userModel.findByIdAndUpdate(
+      userId,
+      {
+        name: name,
+        age: age,
+        designation: designation,
+      },
+      { new: true }
+    );
+
+    if (updatedUser) {
+      res.send(updatedUser);
+    } else {
+      res.status(404).send("User not found");
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
